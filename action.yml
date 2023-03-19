@@ -1,0 +1,32 @@
+name: "Devimage"
+description: "Configures devimage for use in a GitHub Action"
+inputs:
+  python-version:
+    description: "Version of python to use for the action"
+    required: false
+  ruby-version:
+    description: "Version of ruby to use for the action"
+    required: false
+  golang-version:
+    description: "Version of go to use for the action"
+    required: false
+  nodejs-version:
+    description: "Version of nodejs to use for the action"
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - run: cp /root/.tool-versions /github/home/.tool-versions
+      shell: sh
+    - run: use python ${{ inputs.python-version }}
+      shell: bash -el {0}
+      if: inputs.python-version
+    - run: use ruby ${{ inputs.ruby-version }}
+      shell: bash -el {0}
+      if: inputs.ruby-version
+    - run: use golang ${{ inputs.golang-version }}
+      shell: bash -el {0}
+      if: inputs.golang-version
+    - run: use nodejs ${{ inputs.nodejs-version }}
+      shell: bash -el {0}
+      if: inputs.nodejs-version
