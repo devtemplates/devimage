@@ -26,7 +26,7 @@ cat <<EOF >>/usr/local/bin/use
 
 export ASDF_DIR=$ASDF_DIR
 export ASDF_DATA_DIR=$ASDF_DATA_DIR
- 
+
 . $ASDF_DIR/asdf.sh
 
 EOF
@@ -65,7 +65,18 @@ function use() {
         asdf install "${language}" "${resolved_version}" || return $?
     fi
 
-    asdf global "${language}" "${resolved_version}" || return $?
+    # Ensure that the user's home directory is used when switching versions
+    # even if the script is run with sudo
+    OLD_HOME="$HOME"
+    if [ "$OLD_HOME" = "$(eval echo ~$USER)" ]; then
+        export HOME=$(eval echo ~$SUDO_USER)
+    fi
+
+    asdf global "${language}" "${resolved_version}"
+    status=$?
+
+    export HOME="$OLD_HOME"
+    return $status
 }
 
 # ##############################################################################
