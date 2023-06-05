@@ -67,7 +67,8 @@ RUN asdf plugin add nodejs \
 # =============================
 
 ARG YARN_VERSION=1.22.11
-RUN asdf plugin add yarn \
+
+RUN asdf plugin add yarn https://github.com/devtemplates/asdf-yarn \
     && asdf install yarn ${YARN_VERSION} \
     && asdf global yarn ${YARN_VERSION}
 
